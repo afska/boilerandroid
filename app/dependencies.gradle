@@ -1,0 +1,65 @@
+dependencies {
+    ext.support_version = '27.1.1'
+    ext.conductor_version = '2.1.4'
+    ext.stetho_version = "1.5.0"
+    ext.retrofit_version = '2.4.0'
+    ext.architecture_components_version = '1.1.1'
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+    //SUPPORT
+    implementation "com.android.support:appcompat-v7:$support_version"
+    implementation "com.android.support:support-v4:$support_version"
+    implementation "com.android.support:design:$support_version"
+    implementation "com.android.support:cardview-v7:$support_version"
+    implementation "com.android.support:recyclerview-v7:$support_version"
+
+    //ROUTER
+    implementation "com.bluelinelabs:conductor-support:$conductor_version"
+    implementation "com.bluelinelabs:conductor-rxlifecycle2:$conductor_version"
+
+    // RX
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation "io.reactivex.rxjava2:rxjava:2.1.16"
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
+
+    //NETWORKING
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
+
+    //ARCHITECTURE COMPONENTS
+    implementation "android.arch.lifecycle:runtime:$architecture_components_version"
+    implementation "android.arch.lifecycle:extensions:$architecture_components_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$architecture_components_version"
+
+    //PERSISTENCE
+    implementation "android.arch.persistence.room:runtime:$architecture_components_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$architecture_components_version"
+    implementation "android.arch.persistence.room:rxjava2:$architecture_components_version"
+    testImplementation "android.arch.persistence.room:testing:$architecture_components_version"
+
+    //UI
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+//	implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+//	implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+//	implementation 'de.hdodenhof:circleimageview:2.1.0'
+//	implementation 'com.romandanylyk:pageindicatorview:0.2.0'
+//	implementation 'com.github.siyamed:android-shape-imageview:0.9.3@aar'
+
+    //INTEGRATIONS
+    implementation "com.google.firebase:firebase-core:16.0.1"
+    implementation "com.google.firebase:firebase-config:16.0.0"
+
+    //OTHERS
+    implementation "com.facebook.stetho:stetho:$stetho_version"
+    implementation "com.facebook.stetho:stetho-okhttp3:$stetho_version"
+    implementation "com.jakewharton.timber:timber:4.7.1"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.google.code.findbugs:jsr305:3.0.1'
+}

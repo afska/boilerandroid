@@ -35,7 +35,7 @@ open class BaseController(private val layout: Int) : RxController() {
 		else router.setRoot(transaction)
 	}
 
-	fun <T> doApiCall(single: Single<Response<T>>, cache: Boolean = true): Single<T> {
+	fun <T> http(single: Single<Response<T>>, cache: Boolean = true): Single<T> {
 		return single.asApiCall(this, cache)
 	}
 

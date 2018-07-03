@@ -11,6 +11,6 @@ interface PostsApi {
 	fun getAll(): Single<Response<List<BlogPost>>>
 
 	companion object {
-		val instance: PostsApi get() = newApi("https://boilerandroid.000webhostapp.com/wp-json/wp/v2/")
+		val api: PostsApi get() = newApi("https://boilerandroid.000webhostapp.com/wp-json/wp/v2/")
 	}
 }

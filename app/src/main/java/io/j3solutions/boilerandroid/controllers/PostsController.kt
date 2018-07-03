@@ -8,8 +8,8 @@ import timber.log.Timber
 
 class PostsController : BaseController(R.layout.controller_posts) {
 	override fun onViewBound(view: View) {
-		doApiCall(
-			PostsApi.instance.getAll()
+		http(
+			PostsApi.api.getAll()
 		).subscribe(this) {
 			Timber.d("LOS POSTS SON $it")
 		}

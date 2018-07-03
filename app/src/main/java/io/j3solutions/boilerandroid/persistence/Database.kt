@@ -5,16 +5,15 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import io.j3solutions.boilerandroid.RootApplication
-import io.j3solutions.boilerandroid.models.*
+import io.j3solutions.boilerandroid.models.BlogPost
+import io.j3solutions.boilerandroid.models.BlogPostDao
 import io.j3solutions.boilerandroid.utils.newSingle
-import io.reactivex.Single
-import timber.log.Timber
 
 @Database(
 	entities = arrayOf(
 		BlogPost::class
 	),
-	version = 1
+	version = 2
 )
 @TypeConverters(Converters::class)
 abstract class Db : RoomDatabase() {

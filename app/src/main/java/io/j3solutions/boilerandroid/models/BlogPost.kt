@@ -4,30 +4,33 @@ import android.arch.persistence.room.*
 import io.reactivex.Flowable
 
 @Entity(tableName = BlogPost.TABLE_NAME)
-data class BlogPost(
-	@PrimaryKey val id: Int,
-	val date: String,
-	val date_gmt: String,
-	val slug: String
-//	@Embedded val title: Title,
-//	@Embedded val content: Content
-) {
+class BlogPost {
 	companion object {
 		const val TABLE_NAME = "BlogPosts"
 	}
 
-	@Ignore
-	constructor() : this(0, "", "", "")
+	@PrimaryKey
+	var id: Int = 0
+
+	var date: String = ""
+	var date_gmt: String = ""
+	var slug: String = ""
+
+	@Embedded(prefix = "title")
+	var title: Title = Title()
+
+	@Embedded(prefix = "content")
+	var content: Content = Content()
 }
 
-//data class Content(
-//    val rendered: String = "",
-//    val protected: Boolean = false
-//)
-//
-//data class Title(
-//    val rendered: String = ""
-//)
+class Content {
+	var rendered: String = ""
+	var protected: Boolean = false
+}
+
+class Title {
+	var rendered: String = ""
+}
 
 @Dao
 interface BlogPostDao {

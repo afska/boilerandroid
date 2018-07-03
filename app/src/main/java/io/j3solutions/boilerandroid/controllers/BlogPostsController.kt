@@ -18,10 +18,6 @@ class BlogPostsController : BaseController(R.layout.controller_blogposts) {
 		view.recycler.adapter = adapter
 		view.recycler.layoutManager = LinearLayoutManager(activity)
 
-		Db.instance { db ->
-			db.blogPostDao().getPosts().subscribe(this) {
-				adapter.populate(it)
-			}
-		}
+		adapter.populate(this) { it.blogPostDao().getPosts() }
 	}
 }

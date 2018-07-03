@@ -4,6 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bluelinelabs.conductor.rxlifecycle2.RxController
+import io.j3solutions.boilerandroid.persistence.Db
+import io.j3solutions.boilerandroid.utils.subscribe
+import io.reactivex.Flowable
 
 abstract class RecyclerAdapter<T, TViewHolder : RecyclerViewHolder<T>>(
 	private val items: MutableList<T>
@@ -32,6 +36,14 @@ abstract class RecyclerAdapter<T, TViewHolder : RecyclerViewHolder<T>>(
 		items.clear()
 		items.addAll(list)
 		notifyDataSetChanged()
+	}
+
+	fun populate(context: RxController?, query: (Db) -> (Flowable<List<T>>)) {
+		Db.instance { db ->
+			query(db).subscribe(context) {
+				this.populate(it)
+			}
+		}
 	}
 
 	open fun getViewTypeOf(item: T) = 0

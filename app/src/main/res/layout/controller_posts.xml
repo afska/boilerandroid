@@ -9,14 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World soy el controller!"
-        />
-
-    <Button
-        android:id="@+id/goToPostsButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Ir a los posts"
+        android:text="Hello World soy una pantallita de posts!"
         />
 
 </LinearLayout>

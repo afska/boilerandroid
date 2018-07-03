@@ -11,7 +11,9 @@ import com.bluelinelabs.conductor.RouterTransaction
 import com.bluelinelabs.conductor.rxlifecycle2.RxController
 import com.evernote.android.state.StateSaver
 import io.j3solutions.boilerandroid.RootApplication
+import io.j3solutions.boilerandroid.utils.asApiCall
 import io.reactivex.Single
+import retrofit2.Response
 import timber.log.Timber
 
 open class BaseController(private val layout: Int) : RxController() {
@@ -31,6 +33,10 @@ open class BaseController(private val layout: Int) : RxController() {
 
 		if (!setRoot) router.pushController(transaction)
 		else router.setRoot(transaction)
+	}
+
+	fun <T> doApiCall(single: Single<Response<T>>, cache: Boolean = true): Single<T> {
+		return single.asApiCall(this, cache)
 	}
 
 	fun <T> withLoading(single: Single<T>): Single<T> {

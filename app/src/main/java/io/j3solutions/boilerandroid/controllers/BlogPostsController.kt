@@ -3,8 +3,6 @@ package io.j3solutions.boilerandroid.controllers
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import io.j3solutions.boilerandroid.R
-import io.j3solutions.boilerandroid.persistence.Db
-import io.j3solutions.boilerandroid.utils.subscribe
 import io.j3solutions.boilerandroid.views.adapters.BlogPostsRecyclerAdapter
 import kotlinx.android.synthetic.main.controller_blogposts.view.*
 import timber.log.Timber

@@ -13,6 +13,7 @@ import io.j3solutions.boilerandroid.R
 import io.j3solutions.boilerandroid.controllers.BaseController
 import io.j3solutions.boilerandroid.controllers.HomeController
 import io.j3solutions.boilerandroid.events.Events
+import io.j3solutions.boilerandroid.services.ApiUpdateService
 import io.j3solutions.boilerandroid.utils.addChangeListener
 import io.reactivex.Single
 import kotlinx.android.synthetic.main.activity_main.*
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 	private fun setUpRouter(savedInstanceState: Bundle?) {
 		router = Conductor.attachRouter(this, container, savedInstanceState)
 		router.addChangeListener {
-			// ApiUpdateService.start()
+			ApiUpdateService.start()
 		}
 
 		getInitialController().subscribe({

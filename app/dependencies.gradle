@@ -43,7 +43,7 @@ dependencies {
 
     //PERSISTENCE
     implementation "android.arch.persistence.room:runtime:$architecture_components_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$architecture_components_version"
+    kapt  "android.arch.persistence.room:compiler:$architecture_components_version"
     implementation "android.arch.persistence.room:rxjava2:$architecture_components_version"
     testImplementation "android.arch.persistence.room:testing:$architecture_components_version"
 

@@ -6,11 +6,11 @@ import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.*
 
-interface PostsApi {
+interface BlogPostsApi {
 	@GET("posts")
 	fun getAll(): Single<Response<List<BlogPost>>>
 
 	companion object {
-		val api: PostsApi get() = newApi("https://boilerandroid.000webhostapp.com/wp-json/wp/v2/")
+		val api: BlogPostsApi get() = newApi("https://boilerandroid.000webhostapp.com/wp-json/wp/v2/")
 	}
 }

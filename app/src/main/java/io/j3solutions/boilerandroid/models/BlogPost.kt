@@ -35,7 +35,7 @@ class Title {
 @Dao
 interface BlogPostDao {
 	@Query("SELECT * FROM ${BlogPost.TABLE_NAME}")
-	fun getPosts(): Flowable<BlogPost>
+	fun getPosts(): Flowable<List<BlogPost>>
 
 	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	fun insertAll(blogPosts: List<BlogPost>)

@@ -10,9 +10,9 @@ import io.j3solutions.boilerandroid.utils.subscribe
 import io.reactivex.Flowable
 
 class SimpleRecyclerAdapter<T>(
-	override val noItemsView: View? = null,
 	val itemLayoutResource: Int,
-	val itemSetter: (View, T, SimpleRecyclerAdapter<T>) -> Unit
+	val itemSetter: (View, T, SimpleRecyclerAdapter<T>) -> Unit,
+	override val noItemsView: View? = null
 ) : RecyclerView.Adapter<SimpleRecipeViewHolder<T>>(), MutableListAdapter<T> {
 	override var items: MutableList<T> = mutableListOf()
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleRecipeViewHolder<T> {

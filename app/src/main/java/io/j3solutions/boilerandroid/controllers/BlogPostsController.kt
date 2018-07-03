@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.item_blogpost.view.*
 
 class BlogPostsController : BaseController(R.layout.controller_blogposts) {
 	override fun onViewBound(view: View) {
-		val adapter = SimpleRecyclerAdapter<BlogPost>(itemLayoutResource = R.layout.item_blogpost, itemSetter = { view, blogPost, adapter ->
+		val adapter = SimpleRecyclerAdapter<BlogPost>(R.layout.item_blogpost, { view, blogPost, adapter ->
 			view.title.text = blogPost.title.rendered
 			view.content.text = blogPost.content.rendered
 		})

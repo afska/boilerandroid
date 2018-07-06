@@ -35,6 +35,14 @@ open class BaseController(private val layout: Int) : RxController() {
 		else router.setRoot(transaction)
 	}
 
+	fun transitionTo(controller: Controller, setRoot: Boolean = false) {
+		goTo(controller, setRoot) {
+			it
+				.popChangeHandler(HorizontalChangeHandler())
+				.pushChangeHandler(HorizontalChangeHandler())
+		}
+	}
+	
 	fun <T> http(single: Single<Response<T>>, cache: Boolean = true): Single<T> {
 		return single.asApiCall(this, cache)
 	}

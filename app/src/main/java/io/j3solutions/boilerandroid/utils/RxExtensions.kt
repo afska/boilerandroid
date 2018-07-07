@@ -20,7 +20,10 @@ fun <T> Single<Response<T>>.asApiCall(controller: RxController? = null, cache: B
 		.setUpThreads(controller)
 		.flatMap {
 			if (it.isSuccessful) Single.just(it.body()!!)
-			else Single.error(RequestFailedException(it.code()))
+			else {
+				val errorBody = try { it.errorBody().toString().fromJson() } catch(e: Exception) { null }
+				Single.error(RequestFailedException(it.code(), errorBody))
+			}
 		}
 	if (cache) result = result.cache()
 

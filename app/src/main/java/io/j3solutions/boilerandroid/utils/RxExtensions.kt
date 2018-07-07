@@ -1,6 +1,8 @@
 package io.j3solutions.boilerandroid.utils
 
 import com.bluelinelabs.conductor.rxlifecycle2.RxController
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import io.j3solutions.boilerandroid.RootApplication
 import io.j3solutions.boilerandroid.utils.api.RequestFailedException
 import io.reactivex.Flowable
@@ -21,7 +23,10 @@ fun <T> Single<Response<T>>.asApiCall(controller: RxController? = null, cache: B
 		.flatMap {
 			if (it.isSuccessful) Single.just(it.body()!!)
 			else {
-				val errorBody = try { it.errorBody()!!.string().fromJson() } catch(e: Exception) { null }
+				val errorBody = try {
+					JsonParser().parse(it.errorBody()!!.string()) as JsonObject
+				} catch(e: Exception) { null }
+
 				Single.error(RequestFailedException(it.code(), errorBody))
 			}
 		}

@@ -21,7 +21,7 @@ fun <T> Single<Response<T>>.asApiCall(controller: RxController? = null, cache: B
 		.flatMap {
 			if (it.isSuccessful) Single.just(it.body()!!)
 			else {
-				val errorBody = try { it.errorBody().toString().fromJson() } catch(e: Exception) { null }
+				val errorBody = try { it.errorBody()!!.string().fromJson() } catch(e: Exception) { null }
 				Single.error(RequestFailedException(it.code(), errorBody))
 			}
 		}

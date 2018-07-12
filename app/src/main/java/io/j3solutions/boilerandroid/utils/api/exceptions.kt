@@ -1,4 +1,4 @@
-package io.j3solutions.suterhandroid.utils.api
+package io.j3solutions.boilerandroid.utils.api
 
 import com.google.gson.JsonObject
 import java.lang.RuntimeException

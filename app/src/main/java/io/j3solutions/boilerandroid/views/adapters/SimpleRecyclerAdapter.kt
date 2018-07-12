@@ -15,6 +15,20 @@ class SimpleRecyclerAdapter<T>(
 	override val noItemsView: View? = null
 ) : RecyclerView.Adapter<SimpleRecipeViewHolder<T>>(), MutableListAdapter<T> {
 	override var items: MutableList<T> = mutableListOf()
+
+	fun populate(context: RxController?, query: (Db) -> (Flowable<List<T>>)) {
+		populateWithListener(context, query)
+	}
+
+	fun populateWithListener(context: RxController?, query: (Db) -> (Flowable<List<T>>), onPopulate: () -> (Unit) = {}) {
+		Db.instance { db ->
+			query(db).subscribe(context) {
+				this.populate(it)
+				onPopulate()
+			}
+		}
+	}
+
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimpleRecipeViewHolder<T> {
 		return SimpleRecipeViewHolder<T>(LayoutInflater
 			.from(parent.context)
@@ -27,14 +41,6 @@ class SimpleRecyclerAdapter<T>(
 	}
 
 	override fun getItemCount(): Int = items.size
-
-	fun populate(context: RxController?, query: (Db) -> (Flowable<List<T>>)) {
-		Db.instance { db ->
-			query(db).subscribe(context) {
-				this.populate(it)
-			}
-		}
-	}
 }
 
 open class SimpleRecipeViewHolder<T>(val view: View, val itemSetter: (View, T, SimpleRecyclerAdapter<T>) -> Unit, val adapter: SimpleRecyclerAdapter<T>) : RecyclerView.ViewHolder(view) {

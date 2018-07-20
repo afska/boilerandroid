@@ -17,9 +17,25 @@ class Photographer {
 		const val REQUEST_CAMERA_CAPTURE = 2912
 	}
 
-	private var currentPromiseEmitter: SingleEmitter<File>? = null
+	private var currentBitmapEmitter: SingleEmitter<Bitmap>? = null
+	private var currentFileEmitter: SingleEmitter<File>? = null
 	private var currentPhotoPath = ""
 
+	/**
+	 * Takes a photo and get the thumbnail as a *Bitmap*.
+	 */
+	fun takePhoto(controller: Controller): Single<Bitmap> {
+		val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+		controller.startActivityForResult(takePictureIntent, REQUEST_CAMERA_CAPTURE)
+
+		return Single.create<Bitmap> {
+			currentBitmapEmitter = it
+		}
+	}
+
+	/**
+	 * Takes a photo and retrieves the full-size image as a *File*.
+	 */
 	fun takePhoto(controller: Controller, fileProvider: String): Single<File> {
 		val activity = controller.activity!!
 
@@ -33,23 +49,38 @@ class Photographer {
 		}
 
 		return Single.create<File> {
-			currentPromiseEmitter = it
+			currentFileEmitter = it
 		}
 	}
 
 	fun handleOnActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
 		if (requestCode == REQUEST_CAMERA_CAPTURE) {
-			val currentPromiseEmitter = currentPromiseEmitter ?: return
+			when {
+				currentBitmapEmitter != null -> {
+					val currentPromiseEmitter = currentBitmapEmitter ?: return
 
-			if (resultCode == Activity.RESULT_OK) {
-				val file = File(currentPhotoPath)
-				currentPromiseEmitter.onSuccess(file)
-			} else {
-				currentPromiseEmitter.onError(RuntimeException("Photo request failed. Result code: ${resultCode}"))
+					if (resultCode == Activity.RESULT_OK) {
+						val bitmap = intent!!.extras.get("data") as Bitmap
+						currentPromiseEmitter.onSuccess(bitmap)
+					} else fail(currentPromiseEmitter, resultCode)
+				}
+
+				currentFileEmitter != null -> {
+					val currentPromiseEmitter = currentFileEmitter ?: return
+
+					if (resultCode == Activity.RESULT_OK) {
+						val file = File(currentPhotoPath)
+						currentPromiseEmitter.onSuccess(file)
+					} else fail(currentPromiseEmitter, resultCode)
+				}
 			}
 
 			clearState()
 		}
+	}
+
+	private fun <T> fail(emitter: SingleEmitter<T>, resultCode: Int) {
+		emitter.onError(RuntimeException("Photo request failed. Result code: $resultCode"))
 	}
 
 	private fun createImageFile(activity: Activity): File {
@@ -64,7 +95,8 @@ class Photographer {
 	}
 
 	private fun clearState() {
-		currentPromiseEmitter = null
+		currentBitmapEmitter = null
+		currentFileEmitter = null
 		currentPhotoPath = ""
 	}
 }

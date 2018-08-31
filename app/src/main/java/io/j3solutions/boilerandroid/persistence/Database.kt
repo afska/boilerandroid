@@ -13,7 +13,8 @@ import io.j3solutions.boilerandroid.utils.newSingle
 	entities = arrayOf(
 		BlogPost::class
 	),
-	version = 2
+	version = 2,
+	exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class Db : RoomDatabase() {

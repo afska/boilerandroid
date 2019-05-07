@@ -11,6 +11,6 @@ interface BlogPostsApi {
 	fun getAll(): Single<Response<List<BlogPost>>>
 
 	companion object {
-		val api: BlogPostsApi get() = newApi("https://gist.githubusercontent.com/rodri042/6e2d1ac8c8a9ecfa6cd10bbed4ac9389/raw/dd49dd24ab7f03fc1da2edc330dc34b54722f693/")
+		val api: BlogPostsApi get() = newApi("https://gist.githubusercontent.com/rodri042/6e2d1ac8c8a9ecfa6cd10bbed4ac9389/raw/353744e46c8d12a21b59353b9b0c5486429b4964/")
 	}
 }

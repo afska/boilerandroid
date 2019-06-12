@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+
+const fs = require("fs");
+const name = process.argv[2] || "";
+const TO_SNAKE_CASE = (s) => s.replace(/\.?([A-Z])/g, function (x,y){return "_" + y.toLowerCase()}).replace(/^_/, "")
+const ROOT_DIR = `${__dirname}/../app/src/main`;
+const XML_NAME = `widget_${TO_SNAKE_CASE(name)}`;
+const CLASS_FILE = `${ROOT_DIR}/java/com/aptoglobal/app/views/widgets/${name}View.kt`;
+const LAYOUT_FILE = `${ROOT_DIR}/res/layouts/widgets/layout/${XML_NAME}.xml`;
+
+// ---
+
+if (!name) {
+  console.log("Usage: ./scaffold TodoItem");
+  process.exit(1);
+}
+
+fs.writeFileSync(CLASS_FILE,
+`package com.aptoglobal.app.views.widgets
+
+import android.content.Context
+import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.FrameLayout
+import com.aptoglobal.app.R
+import com.aptoglobal.app.utils.withAttributes
+
+class ${name}View: FrameLayout {
+	init {
+		LayoutInflater
+			.from(context)
+			.inflate(R.layout.${XML_NAME}, this, true)
+	}
+
+	constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+		super(context, attrs, defStyleAttr) {
+
+		attrs.withAttributes(this) {
+
+		}
+	}
+
+	constructor(context: Context) : this(context, null)
+	constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+}
+`);
+
+fs.writeFileSync(LAYOUT_FILE,
+`<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:gravity="center"
+	>
+
+</LinearLayout>
+`);
+
+console.log(`Done!\n -> ${CLASS_FILE}\n -> ${LAYOUT_FILE}`);

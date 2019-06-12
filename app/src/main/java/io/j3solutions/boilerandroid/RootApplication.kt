@@ -2,23 +2,22 @@ package io.j3solutions.boilerandroid
 
 import android.app.Application
 import android.content.Context
-import android.util.Log
 import com.facebook.stetho.Stetho
 import timber.log.Timber
 
 class RootApplication : Application() {
-	companion object {
-		lateinit var appContext: Context
-	}
+    companion object {
+        lateinit var appContext: Context
+    }
 
-	override fun onCreate() {
-		super.onCreate()
+    override fun onCreate() {
+        super.onCreate()
 
-		if (BuildConfig.DEBUG) {
-			Stetho.initializeWithDefaults(this)
-			Timber.plant(Timber.DebugTree())
-		}
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+            Timber.plant(Timber.DebugTree())
+        }
 
-		appContext = applicationContext
-	}
+        appContext = applicationContext
+    }
 }

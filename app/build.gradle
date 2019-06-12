@@ -4,31 +4,97 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "io.j3solutions.boilerandroid"
-        minSdkVersion 16
-        targetSdkVersion 27
+        minSdkVersion 21
+        multiDexEnabled true
+        targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+    signingConfigs {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            storeFile file("key.keystore")
+//            storePassword "password"
+//            keyAlias "alias"
+//            keyPassword "password"
         }
     }
+    buildTypes {
+        debug {
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-debug"
+            debuggable true
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+    }
+    flavorDimensions "api"
+    productFlavors {
+        staging {
+            buildConfigField "String", "BASE_API_URL", '"https://stage.test.com/v1/"'
+            resValue "string", "app_name", "Boilerandroid Staging"
+            buildConfigField 'boolean', 'IS_STAGING', 'true'
+        }
+        prod {
+            resValue "string", "app_name", "Boilerandroid"
+            buildConfigField "String", "BASE_API_URL", '"https://gist.githubusercontent.com/rodri042/6e2d1ac8c8a9ecfa6cd10bbed4ac9389/raw/353744e46c8d12a21b59353b9b0c5486429b4964/"'
+            buildConfigField 'boolean', 'IS_STAGING', 'false'
+        }
+    }
+
+
+    sourceSets {
+        main {
+            res.srcDirs = [
+                    file("src/main/res/layouts/").listFiles(),
+                    "src/main/res"
+            ]
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+configurations {
+    ktlint
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //KTLINT
+    ktlint "com.pinterest:ktlint:0.33.0"
 }
+
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "--verbose", "src/**/*.kt"
+    // to generate report in checkstyle format prepend following args:
+    // "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/ktlint.xml"
+    // see https://github.com/pinterest/ktlint#usage for more
+}
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    classpath = configurations.ktlint
+    main = "com.pinterest.ktlint.Main"
+    args "-F", "src/**/*.kt"
+}
+
+check.dependsOn ktlintFormat
 
 apply from: rootProject.file('app/dependencies.gradle')

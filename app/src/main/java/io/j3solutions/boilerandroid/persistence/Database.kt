@@ -1,41 +1,50 @@
 package io.j3solutions.boilerandroid.persistence
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import io.j3solutions.boilerandroid.RootApplication
 import io.j3solutions.boilerandroid.models.BlogPost
 import io.j3solutions.boilerandroid.models.BlogPostDao
-import io.j3solutions.boilerandroid.utils.newSingle
+import io.j3solutions.boilerandroid.utils.extensions.newSingle
+import io.reactivex.Single
+import io.reactivex.annotations.CheckReturnValue
+import io.reactivex.disposables.Disposable
+import androidx.room.Database as DatabaseAnnotation
 
-@Database(
-	entities = arrayOf(
-		BlogPost::class
-	),
-	version = 2,
-	exportSchema = false
+@DatabaseAnnotation(
+    entities = [BlogPost::class],
+    version = 1,
+    exportSchema = false
 )
 @TypeConverters(Converters::class)
-abstract class Db : RoomDatabase() {
-	abstract fun blogPostDao(): BlogPostDao
+abstract class Database : RoomDatabase() {
+    abstract fun blogPostDao(): BlogPostDao
 
-	companion object {
-		private var _instance: Db? = null
+    companion object {
+        private var _instance: Database? = null
 
-		val instance: Db
-			@Synchronized get() {
-				if (_instance == null) {
-					_instance = Room
-						.databaseBuilder(RootApplication.appContext,
-							Db::class.java, "boilerandroid-database")
-						.build()
-				}
-				return _instance!!
-			}
-	}
+        val instance: Database
+            @Synchronized get() {
+                if (_instance == null) {
+                    _instance = Room
+                        .databaseBuilder(
+                            RootApplication.appContext,
+                            Database::class.java,
+                            "boilerandroid-database"
+                        )
+                        .build()
+                }
+                return _instance!!
+            }
+    }
 
-	operator fun <T> invoke(action: (Db) -> (T)) {
-		newSingle { action(instance) }.subscribe({}, {})
-	}
+    fun <T> doSingle(action: (Database) -> (T)): Single<T> {
+        return newSingle { action(instance) }
+    }
+
+    @CheckReturnValue
+    operator fun <T> invoke(action: (Database) -> (T)): Disposable {
+        return doSingle(action).subscribe({}, {})
+    }
 }
